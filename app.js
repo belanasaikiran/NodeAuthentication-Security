@@ -62,7 +62,11 @@ app.get("/register", (req, res) => {
   res.render("register");
 });
 app.get("/logout", (req, res) => {
-  res.render("home");
+    req.logout(function(err) {
+        if (err) { return next(err); }
+        res.redirect('/');
+      });
+    
 });
 
 app.get("/secrets", (req, res) => {
@@ -92,7 +96,7 @@ app.post("/register", (req, res) => {
   );
 });
 
-// Login POST
+// Login POST   
 app.post("/login", (req, res) => {
   const user = new User({
     username: req.body.username,
@@ -101,7 +105,7 @@ app.post("/login", (req, res) => {
 
   req.login(user, (err) => {
     if (err) {
-      console.log(err);
+      console.log("Oops!", err);
     } else {
       passport.authenticate("local")(req, res, function () {
         res.redirect("/secrets");
@@ -109,6 +113,9 @@ app.post("/login", (req, res) => {
     }
   });
 });
+
+
+
 
 app.listen(3000, function () {
   console.log("Server started on port 3000");
