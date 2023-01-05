@@ -48,6 +48,13 @@ userSchema.plugin(passportLocalMongoose);
 
 const User = new mongoose.model("User", userSchema);
 
+
+// serialization & deserialization of user data from passport.js 
+passport.use(User.createStrategy())
+
+passport.serializeUser(User.serializeUser())
+passport.deserializeUser(User.deserializeUser())
+
 //TODO
 //  GET Routes
 app.get("/", (req, res) => {
